@@ -64,7 +64,7 @@ export default function App() {
       {/* Navbar */}
       <nav className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Logo />
+          <Logo height={38} />
           <div className="hidden md:flex items-center gap-8">
             {NAV_LINKS.map(link => (
               <a key={link} href="#" className="text-sm font-medium text-gray-600 hover:text-[#1B2D5B] transition-colors">{link}</a>
@@ -256,7 +256,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto grid md:grid-cols-5 gap-8">
           <div className="md:col-span-2">
             <div className="mb-3">
-              <Logo white size={0.75} />
+              <Logo white height={32} />
             </div>
             <p className="text-sm leading-relaxed">Smart child care payments.<br />Stronger futures.</p>
           </div>
