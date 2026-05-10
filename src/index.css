@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  font-family: 'Manrope', sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #fff;
+}
+
+#root {
+  width: 100%;
+}
