@@ -252,11 +252,11 @@ export default function App() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#111c38] text-gray-400 py-12 px-6">
+      <footer className="bg-[#142131] text-gray-400 py-12 px-6">
         <div className="max-w-7xl mx-auto grid md:grid-cols-5 gap-8">
           <div className="md:col-span-2">
             <div className="mb-3">
-              <Logo white height={60} />
+              <Logo white height={80} />
             </div>
             <p className="text-sm leading-relaxed">Smart child care payments.<br />Stronger futures.</p>
           </div>
