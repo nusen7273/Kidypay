@@ -1,4 +1,5 @@
 import './index.css'
+import Logo from './components/Logo'
 
 const NAV_LINKS = ['Employers', 'Employees', 'Employee Benefits', 'Resources', 'About Us']
 
@@ -63,10 +64,7 @@ export default function App() {
       {/* Navbar */}
       <nav className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl font-extrabold text-[#1B2D5B]">KidyPay</span>
-            <span className="w-6 h-6 rounded-full bg-[#2E9E4F] flex items-center justify-center text-white text-xs font-bold">$</span>
-          </div>
+          <Logo />
           <div className="hidden md:flex items-center gap-8">
             {NAV_LINKS.map(link => (
               <a key={link} href="#" className="text-sm font-medium text-gray-600 hover:text-[#1B2D5B] transition-colors">{link}</a>
@@ -257,9 +255,8 @@ export default function App() {
       <footer className="bg-[#111c38] text-gray-400 py-12 px-6">
         <div className="max-w-7xl mx-auto grid md:grid-cols-5 gap-8">
           <div className="md:col-span-2">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-xl font-extrabold text-white">KidyPay</span>
-              <span className="w-5 h-5 rounded-full bg-[#2E9E4F] flex items-center justify-center text-white text-xs font-bold">$</span>
+            <div className="mb-3">
+              <Logo white size={0.75} />
             </div>
             <p className="text-sm leading-relaxed">Smart child care payments.<br />Stronger futures.</p>
           </div>
