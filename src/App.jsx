@@ -1,5 +1,8 @@
+import { useState } from 'react'
 import './index.css'
 import Logo from './components/Logo'
+import LoginModal from './components/LoginModal'
+import SignupModal from './components/SignupModal'
 
 const NAV_LINKS = ['Employers', 'Employees', 'Employee Benefits', 'Resources', 'About Us']
 
@@ -57,9 +60,27 @@ const TESTIMONIALS = [
   },
 ]
 
+const SECTION_IDS = {
+  'Employers': 'employers',
+  'Employees': 'employees',
+  'Employee Benefits': 'platform',
+  'Resources': 'testimonials',
+  'About Us': 'cta',
+}
+
+const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+
 export default function App() {
+  const [modal, setModal] = useState(null) // 'login' | 'signup' | null
+
   return (
     <div className="min-h-screen text-[#1B2D5B]">
+      {modal === 'login' && (
+        <LoginModal onClose={() => setModal(null)} onSwitchToSignup={() => setModal('signup')} />
+      )}
+      {modal === 'signup' && (
+        <SignupModal onClose={() => setModal(null)} onSwitchToLogin={() => setModal('login')} />
+      )}
 
       {/* Navbar */}
       <nav className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
@@ -67,14 +88,19 @@ export default function App() {
           <Logo height={70} />
           <div className="hidden md:flex items-center gap-8">
             {NAV_LINKS.map(link => (
-              <a key={link} href="#" className="text-sm font-medium text-gray-600 hover:text-[#1B2D5B] transition-colors">{link}</a>
+              <button key={link} onClick={() => scrollTo(SECTION_IDS[link])}
+                className="text-sm font-medium text-gray-600 hover:text-[#1B2D5B] transition-colors">
+                {link}
+              </button>
             ))}
           </div>
           <div className="flex items-center gap-3">
-            <button className="text-sm font-semibold text-[#1B2D5B] border border-[#1B2D5B] px-4 py-2 rounded-lg hover:bg-[#1B2D5B] hover:text-white transition-colors">
+            <button onClick={() => setModal('login')}
+              className="text-sm font-semibold text-[#1B2D5B] border border-[#1B2D5B] px-4 py-2 rounded-lg hover:bg-[#1B2D5B] hover:text-white transition-colors">
               Login
             </button>
-            <button className="text-sm font-semibold bg-[#2E9E4F] text-white px-4 py-2 rounded-lg hover:bg-[#257a3f] transition-colors">
+            <button onClick={() => setModal('signup')}
+              className="text-sm font-semibold bg-[#2E9E4F] text-white px-4 py-2 rounded-lg hover:bg-[#257a3f] transition-colors">
               Get Started
             </button>
           </div>
@@ -82,7 +108,7 @@ export default function App() {
       </nav>
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-[#f0f4ff] to-[#e8f5ee] py-20 px-6">
+      <section id="hero" className="bg-gradient-to-br from-[#f0f4ff] to-[#e8f5ee] py-20 px-6">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           <div>
             <span className="inline-block bg-[#2E9E4F]/10 text-[#2E9E4F] text-xs font-semibold px-3 py-1 rounded-full mb-6">
@@ -96,10 +122,12 @@ export default function App() {
               KidyPay simplifies child care payments and benefits for employers and families — saving time, reducing stress, and building a better future for working parents.
             </p>
             <div className="flex gap-4 mb-12">
-              <button className="bg-[#2E9E4F] text-white font-semibold px-6 py-3 rounded-xl hover:bg-[#257a3f] transition-colors">
+              <button onClick={() => setModal('signup')}
+                className="bg-[#2E9E4F] text-white font-semibold px-6 py-3 rounded-xl hover:bg-[#257a3f] transition-colors">
                 Get Started Free
               </button>
-              <button className="border border-[#1B2D5B] text-[#1B2D5B] font-semibold px-6 py-3 rounded-xl hover:bg-[#1B2D5B] hover:text-white transition-colors">
+              <button onClick={() => scrollTo('employers')}
+                className="border border-[#1B2D5B] text-[#1B2D5B] font-semibold px-6 py-3 rounded-xl hover:bg-[#1B2D5B] hover:text-white transition-colors">
                 Learn More
               </button>
             </div>
@@ -131,7 +159,7 @@ export default function App() {
       </section>
 
       {/* For Employers / For Employees */}
-      <section className="py-20 px-6 bg-white">
+      <section id="employers" className="py-20 px-6 bg-white">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12">
           <div className="bg-[#f0f4ff] rounded-3xl p-8">
             <span className="text-xs font-bold text-[#2E9E4F] uppercase tracking-widest">For Employers</span>
@@ -163,7 +191,7 @@ export default function App() {
       </section>
 
       {/* Everything in one place */}
-      <section className="py-20 px-6 bg-[#f8fafc]">
+      <section id="platform" className="py-20 px-6 bg-[#f8fafc]">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
           <div>
             <span className="text-xs font-bold text-[#E8A020] uppercase tracking-widest">Platform</span>
@@ -177,7 +205,8 @@ export default function App() {
                 </li>
               ))}
             </ul>
-            <button className="mt-8 bg-[#1B2D5B] text-white font-semibold px-6 py-3 rounded-xl hover:bg-[#152347] transition-colors">
+            <button onClick={() => setModal('signup')}
+              className="mt-8 bg-[#1B2D5B] text-white font-semibold px-6 py-3 rounded-xl hover:bg-[#152347] transition-colors">
               See the Platform
             </button>
           </div>
@@ -212,7 +241,7 @@ export default function App() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 px-6 bg-white">
+      <section id="testimonials" className="py-20 px-6 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-xs font-bold text-[#2E9E4F] uppercase tracking-widest">Testimonials</span>
@@ -241,11 +270,12 @@ export default function App() {
       </section>
 
       {/* CTA Banner */}
-      <section className="bg-[#1B2D5B] py-16 px-6">
+      <section id="cta" className="bg-[#1B2D5B] py-16 px-6">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl font-extrabold text-white mb-4">Ready to build stronger futures?</h2>
           <p className="text-blue-200 mb-8">Join hundreds of employers and thousands of families who trust KidyPay for smarter childcare benefits.</p>
-          <button className="bg-[#2E9E4F] text-white font-semibold px-8 py-4 rounded-xl text-lg hover:bg-[#257a3f] transition-colors">
+          <button onClick={() => setModal('signup')}
+            className="bg-[#2E9E4F] text-white font-semibold px-8 py-4 rounded-xl text-lg hover:bg-[#257a3f] transition-colors">
             Get Started Today
           </button>
         </div>
