@@ -1,9 +1,13 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Modal from './Modal'
+import { useApp } from '../context/AppContext'
 
 const ROLES = ['Employer / HR', 'Employee / Parent', 'Other']
 
 export default function SignupModal({ onClose, onSwitchToLogin }) {
+  const { signup } = useApp()
+  const navigate = useNavigate()
   const [step, setStep] = useState(1)
   const [form, setForm] = useState({ name: '', email: '', role: '', company: '', password: '' })
   const [loading, setLoading] = useState(false)
@@ -11,12 +15,25 @@ export default function SignupModal({ onClose, onSwitchToLogin }) {
 
   const handle = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }))
 
-  const next = (e) => {
+  const next = async (e) => {
     e.preventDefault()
-    if (step === 1) { if (form.name && form.email && form.role) setStep(2) }
-    else {
+    if (step === 1) {
+      if (form.name && form.email && form.role) setStep(2)
+    } else {
       setLoading(true)
-      setTimeout(() => { setLoading(false); setDone(true) }, 1400)
+      await new Promise(r => setTimeout(r, 900))
+      setLoading(false)
+      setDone(true)
+    }
+  }
+
+  const handleDone = () => {
+    const result = signup(form)
+    onClose()
+    if (result.user.role === 'Employer / HR') {
+      navigate('/dashboard/employer')
+    } else {
+      navigate('/dashboard/employee')
     }
   }
 
@@ -25,9 +42,9 @@ export default function SignupModal({ onClose, onSwitchToLogin }) {
       <div className="text-center py-6">
         <div className="text-5xl mb-4">🎉</div>
         <h2 className="text-2xl font-extrabold text-[#1B2D5B] mb-2">You're all set!</h2>
-        <p className="text-gray-500 text-sm mb-6">Welcome to KidyPay, {form.name.split(' ')[0]}. Check your email to verify your account.</p>
-        <button onClick={onClose} className="bg-[#2E9E4F] text-white font-semibold px-6 py-3 rounded-xl hover:bg-[#257a3f] transition-colors">
-          Done
+        <p className="text-gray-500 text-sm mb-6">Welcome to KidyPay, {form.name.split(' ')[0]}! Let's take you to your dashboard.</p>
+        <button onClick={handleDone} className="bg-[#2E9E4F] text-white font-semibold px-6 py-3 rounded-xl hover:bg-[#257a3f] transition-colors">
+          Go to Dashboard →
         </button>
       </div>
     </Modal>
@@ -40,7 +57,7 @@ export default function SignupModal({ onClose, onSwitchToLogin }) {
         <h2 className="text-2xl font-extrabold text-[#1B2D5B]">Create your account</h2>
         <p className="text-gray-400 text-sm mt-1">Step {step} of 2</p>
         <div className="flex gap-2 justify-center mt-3">
-          {[1,2].map(s => (
+          {[1, 2].map(s => (
             <div key={s} className={`h-1.5 w-12 rounded-full transition-colors ${s <= step ? 'bg-[#2E9E4F]' : 'bg-gray-200'}`} />
           ))}
         </div>

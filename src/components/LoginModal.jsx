@@ -1,19 +1,32 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Modal from './Modal'
+import { useApp } from '../context/AppContext'
 
 export default function LoginModal({ onClose, onSwitchToSignup }) {
+  const { login } = useApp()
+  const navigate = useNavigate()
   const [form, setForm] = useState({ email: '', password: '' })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   const handle = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }))
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault()
     if (!form.email || !form.password) { setError('Please fill in all fields.'); return }
     setError('')
     setLoading(true)
-    setTimeout(() => { setLoading(false); setError('Demo mode — no real login yet.') }, 1200)
+    await new Promise(r => setTimeout(r, 600))
+    const result = login(form.email, form.password)
+    setLoading(false)
+    if (!result.success) { setError(result.error); return }
+    onClose()
+    if (result.user.role === 'Employer / HR') {
+      navigate('/dashboard/employer')
+    } else {
+      navigate('/dashboard/employee')
+    }
   }
 
   return (
@@ -40,7 +53,12 @@ export default function LoginModal({ onClose, onSwitchToSignup }) {
             className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#2E9E4F] transition-colors"
           />
         </div>
-        {error && <p className="text-red-500 text-xs">{error}</p>}
+        {error && <p className="text-red-500 text-xs bg-red-50 rounded-lg px-3 py-2">{error}</p>}
+        <div className="bg-blue-50 rounded-xl px-3 py-2.5 text-xs text-blue-600">
+          <p className="font-semibold mb-1">Demo accounts:</p>
+          <p>Employer: hr@techcorp.com / demo123</p>
+          <p>Employee: jane@example.com / demo123</p>
+        </div>
         <button
           type="submit"
           disabled={loading}
